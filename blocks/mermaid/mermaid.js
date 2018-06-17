@@ -12,7 +12,7 @@ Bengine.extensibles.merjs = new function MermaidJS() {
 	
 	this.fetchDependencies = function() {
 		return [{
-	    source: 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.1.2/mermaid.min.js',
+	    source: 'https://unpkg.com/mermaid@8.0.0-beta.9/dist/mermaid.min.js',
 	    type: 'application/javascript',
 	    integrity: null,
 	    inner: '',

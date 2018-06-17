@@ -65,13 +65,13 @@ Bengine.extensibles.d3lib = new function D3lib() {
 		var d3 = {
 			inner: '',
 			integrity: '',
-			source: 'https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js',
+			source: 'https://d3js.org/d3.v5.min.js',
 			type: 'text/javascript',
 			wait: 'd3'
 		};
 		var cmjs = {
 			inner: '',
-			source: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.2/codemirror.js',
+			source: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.2/codemirror.min.js',
 			type: 'text/javascript',
 			wait: 'CodeMirror'
 		};

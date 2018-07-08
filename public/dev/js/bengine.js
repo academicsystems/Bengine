@@ -308,15 +308,44 @@ function Bengine(options,extensions) {
 	
 	// convert from Njn format to page data array for consumption of Bengine load functions
 	_private.helper.convertNjnFormatToPageDataArray = function(blocks) {
+  	var neededVars = {};
+  	for (block of blocks.order) {
+  		/* find used variables */
+  		var re = /@@(.*?)@@/g;
+      var matches;
+      do {
+			  matches = re.exec(blocks.blocks[block][1]);
+        if (matches) {
+				  let parts = matches[1].split('.');
+				  if (!neededVars.hasOwnProperty(parts[0])) {
+  				  neededVars[parts[0]] = {};
+				  }
+				  neededVars[parts[0]][parts[1]] = null;
+				}
+		  } while (matches);
+		}
+  	
 		var pageData = [];
 		for (block of blocks.order) {
 			pageData.push(blocks.blocks[block][0]); // type
-			pageData.push({
+			
+			if (neededVars.hasOwnProperty(block)) {
+  			/* needed vars from this block was found */
+  			pageData.push({
+  				"content":blocks.blocks[block][1] ,
+  				"namespace":block,
+  				"conditional":blocks.blocks[block][2],
+  				"vars":Object.keys(neededVars[block]).join('\n')
+  			});
+  		} else {
+    		pageData.push({
 				"content":blocks.blocks[block][1] ,
 				"namespace":block,
-				"conditional":blocks.blocks[block][2]
+				"conditional":blocks.blocks[block][2],
 			});
+  		}
 		}
+		
 		return pageData;
 	};
 	
@@ -413,7 +442,7 @@ function Bengine(options,extensions) {
 			_priv.reset();
 			var bsearch = true;
 			var lines = text.split(/(?<=\n)/);
-			console.log(lines);
+
 			for (line of lines) {
 				if (bsearch) {
 					bsearch = !_priv.parseOpen(line);
@@ -1718,7 +1747,7 @@ function Bengine(options,extensions) {
 	/*** Section: Ajax Functions For Handling Data On The Back-End ***/
 	
 	_private.datahandler.uploadEngineFile = function() {
-		_private.datahandler.requestFile(".zip,.txt",function(file) {
+		_private.datahandler.requestFile(".zip,.txt,.njn",function(file) {
 			if (file.type === "application/zip") {
 				var zip = new Bengine.libs.zip();
 				zip.loadAsync(file).then(function(unzip) {
@@ -1732,12 +1761,12 @@ function Bengine(options,extensions) {
 						    if (filename[0] !== '.') {
 							    var extension = key.slice(key.length-4,key.length);
 							    if (extension !== ".njn") {
-									filePromises.push(_private.datahandler.sendFile(new File([unzip.files[key]._data.compressedContent], unzip.files[key].name)));
+									  filePromises.push(_private.datahandler.sendFile(new File([unzip.files[key]._data.compressedContent], unzip.files[key].name)));
 							    } else {
 								    txtFile = (new TextDecoder("utf-8")).decode(unzip.files[key]._data.compressedContent);
 							    }
 						    }
-						}
+						  }
 				    }
 
 				    if (txtFile) {
@@ -1753,7 +1782,7 @@ function Bengine(options,extensions) {
 					    });
 				    }
 				});
-			} else if (file.type === "text/plain") {
+			} else if (file.type === "text/plain" || (file.name.indexOf('.njn') > 1 && file.name.split('.')[file.name.split('.').length-1] === "njn") ) {
 				var reader = new FileReader();
 				reader.onload = function(e) {
 				    var blocks = _private.helper.parseEngineFile(reader.result);

@@ -1,0 +1,37 @@
+version: '3.3'
+services:
+  bengine:
+    image: "asystems/bengine:latest"
+    container_name: "bengine"
+    ports:
+      - "2020:2020" # http
+      - "2021:2021" # https
+    volumes:
+      - ./config:/var/www/config # config
+      - ./assets/ssldomain:/var/ssldomain # config
+      - ./public/content:/var/www/public/content # data
+  sage:
+    image: "asystems/sagemath:latest"
+    container_name: "sage"
+    expose:
+     - "9601"
+  python2:
+    image: "asystems/python2.7:latest"
+    container_name: "python2"
+    expose:
+     - "9602"
+  ffmpeg:
+    image: "asystems/ffmpeg:latest"
+    container_name: "ffmpeg"
+    expose:
+     - "80"
+  imagemagick:
+    image: "asystems/imagemagick:latest"
+    container_name: "imagemagick"
+    expose:
+     - "80"
+  unoconv:
+    image: "asystems/unoconv:latest"
+    container_name: "unoconv"
+    expose:
+     - "80"

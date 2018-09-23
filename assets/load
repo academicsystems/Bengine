@@ -1,0 +1,20 @@
+#!/bin/ash
+
+source /var/ssldomain
+
+if [[ -n $DOMAIN ]]; then
+
+mkdir -p /var/www/ssl
+rm -rf /var/www/ssl/*
+
+openssl genrsa -des3 -passout pass:x -out /var/www/ssl/bengine.pass.key 2048
+openssl rsa -passin pass:x -in /var/www/ssl/bengine.pass.key -out /var/www/ssl/bengine.key
+rm /var/www/ssl/bengine.pass.key
+openssl req -new -key /var/www/ssl/bengine.key -out /var/www/ssl/bengine.csr -subj "/CN=$DOMAIN"
+openssl x509 -req -days 3650 -in /var/www/ssl/bengine.csr -signkey /var/www/ssl/bengine.key -out /var/www/ssl/bengine.crt
+cat /var/www/ssl/bengine.key /var/www/ssl/bengine.crt > /var/www/ssl/bengine.pem
+chmod 400 /var/www/ssl/*
+
+fi
+
+cd /var/www/ && npm start

@@ -12,7 +12,7 @@
 	"filesizelimit":104857600,
 	"host":"localhost",
 	"level":"dev",
-	"logging":-1,
+        "logging":-1,
 	"persistence":
 	{
 		"database":"",
@@ -30,34 +30,34 @@
 	"services":
 	{
 		"sage":
-		{
-    		"url":"http://localhost:9601"
-		},
-		"python2":
-		{
-    		"url":"http://localhost:9602"
-		},
-		"audio":
-		{
-    		"url":"http://localhost:9001"
-		},
-		"image":
-		{
-    		"url":"http://localhost:9002"
-		},
-		"slide":
-		{
-    		"url":"http://localhost:9003"
-		},
-		"video":
-		{
-    		"url":"http://localhost:9001"
-		}
+    {
+        "url":"http://sage:9601"
+    },
+    "python2":
+    {
+        "url":"http://python2:9602"
+    },               
+    "audio":
+    {
+        "url":"http://ffmpeg:80"
+    },
+    "image":
+    {
+        "url":"http://imagemagick:80"
+    },
+    "slide":
+    {
+        "url":"http://unoconv:80"
+    },
+    "video":
+    {
+        "url":"http://ffmpeg:80"
+    }
 	},
 	"session":
 	{
 		"key":"xsessionkey",
-		"secret":"KZtX0C0qlhvi)d",
+		"secret":"replace_this_secret",
 		"resave":false,
 		"saveUninitialized":false
 	},
